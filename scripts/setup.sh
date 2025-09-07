@@ -3,4 +3,4 @@
 npm install
 npm install -g pm2 typescript
 npm run build
-pm2 start dist/api/bin/www.js
+pm2 start dist/api/bin/www.js --name "wwamp.me"
