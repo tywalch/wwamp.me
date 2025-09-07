@@ -4,8 +4,9 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && tsc",
-    "start": "pm2 start dist/api/index.js --name wwamp.me"
+    "build": "rm -rf dist && tsc && cp -R api/public dist/api/public && cp -R api/views dist/api/views",
+    "dev": "npm run build && node dist/api/bin/www",
+    "setup": "./scripts/setup.sh"
   },
   "repository": {
     "type": "git",
@@ -19,12 +20,22 @@
   },
   "homepage": "https://github.com/tywalch/wwamp.me#readme",
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.9",
+    "@types/debug": "^4.1.12",
     "@types/express": "^5.0.3",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^24.3.1",
     "pm2": "^6.0.10",
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "^5.1.0",
+    "hbs": "~4.0.4",
+    "helmet": "^8.1.0",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "socket.io": "^4.8.1"
   }
 }
