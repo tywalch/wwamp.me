@@ -5,6 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf dist && tsc && cp -R api/public dist/api/public && cp -R api/views dist/api/views",
+    "start": "pm2 start dist/api/bin/www",
     "dev": "npm run build && node dist/api/bin/www",
     "setup": "./scripts/setup.sh"
   },
