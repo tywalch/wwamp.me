@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf dist && tsc",
-    "start": "node dist/api/index.js"
+    "start": "pm2 start dist/api/index.js --name wwamp.me"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,9 @@
   "homepage": "https://github.com/tywalch/wwamp.me#readme",
   "devDependencies": {
     "@types/express": "^5.0.3",
-    "@types/node": "^24.3.1"
+    "@types/node": "^24.3.1",
+    "pm2": "^6.0.10",
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "express": "^5.1.0"
