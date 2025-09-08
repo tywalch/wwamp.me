@@ -1,0 +1,23 @@
+{
+  "watch": [
+    "."
+  ],
+  "ignore": [
+    "dist/**/*",
+    "node_modules/**/*",
+    "public/scripts/wwamp.js",
+    "public/scripts/wwamp.js.map"
+  ],
+  "ext": "ts,js,json,hbs",
+  "exec": "npm run build:api && node dist/bin/www",
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "delay": 1000,
+  "ignoreRoot": [
+    "dist/**/*",
+    "node_modules/**/*",
+    "public/scripts/wwamp.js",
+    "public/scripts/wwamp.js.map"
+  ]
+}

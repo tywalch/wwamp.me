@@ -6,8 +6,6 @@ import { register as registerSockets } from './sockets';
 import { register as registerRoutes } from './routes';
 import { register as registerMiddleware } from './middleware';
 
-
-
 export function register(app: Express, server: Server) {
   const io = registerSockets(server);
   registerMiddleware(app);

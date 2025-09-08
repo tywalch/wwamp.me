@@ -1,12 +1,14 @@
 {
-  "name": "@wwamp/main",
+  "name": "@wwamp/api",
   "version": "1.0.0",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build --workspace=@wwamp/api",
-    "dev": "npm run dev --workspace=@wwamp/api",
-    "dev:watch": "npm run dev:watch --workspace=@wwamp/api",
+    "build:wwamp": "cd ../../packages/wwamp && npm run build && cp dist/wwamp.js ../../services/api/public/scripts/ && cp dist/wwamp.js.map ../../services/api/public/scripts/",
+    "build:api": "rm -rf dist && tsc && cp -R public dist/public && cp -R views dist/views",
+    "build": "npm run build:wwamp && npm run build:api",
+    "dev": "npm run build && node dist/bin/www",
+    "dev:watch": "npm run build:wwamp && nodemon",
     "prod": "./scripts/setup.sh"
   },
   "repository": {
@@ -26,6 +28,7 @@
     "@types/express": "^5.0.3",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.3.1",
+    "nodemon": "^3.0.0",
     "pm2": "^6.0.10",
     "typescript": "^5.9.2"
   },
@@ -38,9 +41,5 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "socket.io": "^4.8.1"
-  },
-  "workspaces": [
-    "packages/wwamp",
-    "services/api"
-  ]
+  }
 }
