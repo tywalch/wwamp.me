@@ -1,33 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>{{title}}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>BWAMP by FullStory</title>
+    <meta property="og:title" content="BWAMP">
+    <meta property="og:description" content="BWAMP 🎉🎉🎉 by FullStory">
+    <meta property="og:url" content="https://bwamp.me/">
+    <meta property="og:image" content="https://bwamp.me/s/img/bwamp-og.png">
+    <meta property="twitter:image" content="https://bwamp.me/s/img/bwamp-og-twitter.png">
+    <meta name="author" content="radrice">
+    <meta name="description" content="BWAMP 🎉🎉🎉 by FullStory">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/stylesheets/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/bwamp.pack.css">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
   </head>
-  <body>
+  <body class="publicsans-med bg-bwamp cover">
     {{{body}}}
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-      const socket = io();
-
-      const form = document.getElementById('form');
-      const input = document.getElementById('input');
-      const messages = document.getElementById('messages');
-
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (input.value) {
-          socket.emit('chat message', input.value);
-          input.value = '';
-        }
-      });
-
-      socket.on('chat message', (msg) => {
-        const item = document.createElement('li');
-        item.textContent = msg;
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
-      });
-    </script>
+    <script src="/scripts/bwamp.pack.js"></script>
   </body>
 </html>
