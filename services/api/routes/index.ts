@@ -8,6 +8,20 @@ function register(app: Express): Router {
   router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express' });
   });
+
+  router.get('/sprites', function(req, res, next) {
+    res.json({
+      data: {}
+    });
+
+    router.get('/wwamps', function() {
+      res.json({
+        data: {
+          wwamps: [],
+        },
+      });
+    })
+  });
   
   return router;
 }

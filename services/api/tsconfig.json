@@ -1,0 +1,22 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "rootDir": "./",
+        "outDir": "./dist",
+        "module": "nodenext",
+        "target": "es2022",
+        "lib": ["es2022"],
+        "types": ["node"],
+        "moduleResolution": "nodenext",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "declaration": false,
+        "declarationMap": false,
+        "sourceMap": true,
+        "removeComments": false
+    },
+    "include": ["**/*.ts"],
+    "exclude": ["node_modules", "dist"]
+}

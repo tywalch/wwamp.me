@@ -1,0 +1,18 @@
+{
+  "name": "@wwamp/wwamp",
+  "version": "1.0.0",
+  "main": "dist/wwamp.js",
+  "type": "module",
+  "devDependencies": {
+    "esbuild": "^0.19.0",
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "build": "rm -rf dist && esbuild index.ts --bundle --format=esm --outfile=dist/wwamp.js --sourcemap --target=es2020",
+    "build:cjs": "rm -rf dist && esbuild index.ts --bundle --format=cjs --outfile=dist/wwamp.cjs.js --sourcemap --target=es2020",
+    "build:all": "npm run build && npm run build:cjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

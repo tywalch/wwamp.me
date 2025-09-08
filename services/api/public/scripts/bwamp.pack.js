@@ -3,626 +3,626 @@
 /*! Spatial Plugin */
 !function(){"use strict";HowlerGlobal.prototype._pos=[0,0,0],HowlerGlobal.prototype._orientation=[0,0,-1,0,1,0],HowlerGlobal.prototype.stereo=function(e){var n=this;if(!n.ctx||!n.ctx.listener)return n;for(var t=n._howls.length-1;t>=0;t--)n._howls[t].stereo(e);return n},HowlerGlobal.prototype.pos=function(e,n,t){var r=this;return r.ctx&&r.ctx.listener?(n="number"!=typeof n?r._pos[1]:n,t="number"!=typeof t?r._pos[2]:t,"number"!=typeof e?r._pos:(r._pos=[e,n,t],void 0!==r.ctx.listener.positionX?(r.ctx.listener.positionX.setTargetAtTime(r._pos[0],Howler.ctx.currentTime,.1),r.ctx.listener.positionY.setTargetAtTime(r._pos[1],Howler.ctx.currentTime,.1),r.ctx.listener.positionZ.setTargetAtTime(r._pos[2],Howler.ctx.currentTime,.1)):r.ctx.listener.setPosition(r._pos[0],r._pos[1],r._pos[2]),r)):r},HowlerGlobal.prototype.orientation=function(e,n,t,r,o,i){var a=this;if(!a.ctx||!a.ctx.listener)return a;var s=a._orientation;return n="number"!=typeof n?s[1]:n,t="number"!=typeof t?s[2]:t,r="number"!=typeof r?s[3]:r,o="number"!=typeof o?s[4]:o,i="number"!=typeof i?s[5]:i,"number"!=typeof e?s:(a._orientation=[e,n,t,r,o,i],void 0!==a.ctx.listener.forwardX?(a.ctx.listener.forwardX.setTargetAtTime(e,Howler.ctx.currentTime,.1),a.ctx.listener.forwardY.setTargetAtTime(n,Howler.ctx.currentTime,.1),a.ctx.listener.forwardZ.setTargetAtTime(t,Howler.ctx.currentTime,.1),a.ctx.listener.upX.setTargetAtTime(r,Howler.ctx.currentTime,.1),a.ctx.listener.upY.setTargetAtTime(o,Howler.ctx.currentTime,.1),a.ctx.listener.upZ.setTargetAtTime(i,Howler.ctx.currentTime,.1)):a.ctx.listener.setOrientation(e,n,t,r,o,i),a)},Howl.prototype.init=function(e){return function(n){var t=this;return t._orientation=n.orientation||[1,0,0],t._stereo=n.stereo||null,t._pos=n.pos||null,t._pannerAttr={coneInnerAngle:void 0!==n.coneInnerAngle?n.coneInnerAngle:360,coneOuterAngle:void 0!==n.coneOuterAngle?n.coneOuterAngle:360,coneOuterGain:void 0!==n.coneOuterGain?n.coneOuterGain:0,distanceModel:void 0!==n.distanceModel?n.distanceModel:"inverse",maxDistance:void 0!==n.maxDistance?n.maxDistance:1e4,panningModel:void 0!==n.panningModel?n.panningModel:"HRTF",refDistance:void 0!==n.refDistance?n.refDistance:1,rolloffFactor:void 0!==n.rolloffFactor?n.rolloffFactor:1},t._onstereo=n.onstereo?[{fn:n.onstereo}]:[],t._onpos=n.onpos?[{fn:n.onpos}]:[],t._onorientation=n.onorientation?[{fn:n.onorientation}]:[],e.call(this,n)}}(Howl.prototype.init),Howl.prototype.stereo=function(n,t){var r=this;if(!r._webAudio)return r;if("loaded"!==r._state)return r._queue.push({event:"stereo",action:function(){r.stereo(n,t)}}),r;var o=void 0===Howler.ctx.createStereoPanner?"spatial":"stereo";if(void 0===t){if("number"!=typeof n)return r._stereo;r._stereo=n,r._pos=[n,0,0]}for(var i=r._getSoundIds(t),a=0;a<i.length;a++){var s=r._soundById(i[a]);if(s){if("number"!=typeof n)return s._stereo;s._stereo=n,s._pos=[n,0,0],s._node&&(s._pannerAttr.panningModel="equalpower",s._panner&&s._panner.pan||e(s,o),"spatial"===o?void 0!==s._panner.positionX?(s._panner.positionX.setValueAtTime(n,Howler.ctx.currentTime),s._panner.positionY.setValueAtTime(0,Howler.ctx.currentTime),s._panner.positionZ.setValueAtTime(0,Howler.ctx.currentTime)):s._panner.setPosition(n,0,0):s._panner.pan.setValueAtTime(n,Howler.ctx.currentTime)),r._emit("stereo",s._id)}}return r},Howl.prototype.pos=function(n,t,r,o){var i=this;if(!i._webAudio)return i;if("loaded"!==i._state)return i._queue.push({event:"pos",action:function(){i.pos(n,t,r,o)}}),i;if(t="number"!=typeof t?0:t,r="number"!=typeof r?-.5:r,void 0===o){if("number"!=typeof n)return i._pos;i._pos=[n,t,r]}for(var a=i._getSoundIds(o),s=0;s<a.length;s++){var p=i._soundById(a[s]);if(p){if("number"!=typeof n)return p._pos;p._pos=[n,t,r],p._node&&(p._panner&&!p._panner.pan||e(p,"spatial"),void 0!==p._panner.positionX?(p._panner.positionX.setValueAtTime(n,Howler.ctx.currentTime),p._panner.positionY.setValueAtTime(t,Howler.ctx.currentTime),p._panner.positionZ.setValueAtTime(r,Howler.ctx.currentTime)):p._panner.setPosition(n,t,r)),i._emit("pos",p._id)}}return i},Howl.prototype.orientation=function(n,t,r,o){var i=this;if(!i._webAudio)return i;if("loaded"!==i._state)return i._queue.push({event:"orientation",action:function(){i.orientation(n,t,r,o)}}),i;if(t="number"!=typeof t?i._orientation[1]:t,r="number"!=typeof r?i._orientation[2]:r,void 0===o){if("number"!=typeof n)return i._orientation;i._orientation=[n,t,r]}for(var a=i._getSoundIds(o),s=0;s<a.length;s++){var p=i._soundById(a[s]);if(p){if("number"!=typeof n)return p._orientation;p._orientation=[n,t,r],p._node&&(p._panner||(p._pos||(p._pos=i._pos||[0,0,-.5]),e(p,"spatial")),void 0!==p._panner.orientationX?(p._panner.orientationX.setValueAtTime(n,Howler.ctx.currentTime),p._panner.orientationY.setValueAtTime(t,Howler.ctx.currentTime),p._panner.orientationZ.setValueAtTime(r,Howler.ctx.currentTime)):p._panner.setOrientation(n,t,r)),i._emit("orientation",p._id)}}return i},Howl.prototype.pannerAttr=function(){var n,t,r,o=this,i=arguments;if(!o._webAudio)return o;if(0===i.length)return o._pannerAttr;if(1===i.length){if("object"!=typeof i[0])return r=o._soundById(parseInt(i[0],10)),r?r._pannerAttr:o._pannerAttr;n=i[0],void 0===t&&(n.pannerAttr||(n.pannerAttr={coneInnerAngle:n.coneInnerAngle,coneOuterAngle:n.coneOuterAngle,coneOuterGain:n.coneOuterGain,distanceModel:n.distanceModel,maxDistance:n.maxDistance,refDistance:n.refDistance,rolloffFactor:n.rolloffFactor,panningModel:n.panningModel}),o._pannerAttr={coneInnerAngle:void 0!==n.pannerAttr.coneInnerAngle?n.pannerAttr.coneInnerAngle:o._coneInnerAngle,coneOuterAngle:void 0!==n.pannerAttr.coneOuterAngle?n.pannerAttr.coneOuterAngle:o._coneOuterAngle,coneOuterGain:void 0!==n.pannerAttr.coneOuterGain?n.pannerAttr.coneOuterGain:o._coneOuterGain,distanceModel:void 0!==n.pannerAttr.distanceModel?n.pannerAttr.distanceModel:o._distanceModel,maxDistance:void 0!==n.pannerAttr.maxDistance?n.pannerAttr.maxDistance:o._maxDistance,refDistance:void 0!==n.pannerAttr.refDistance?n.pannerAttr.refDistance:o._refDistance,rolloffFactor:void 0!==n.pannerAttr.rolloffFactor?n.pannerAttr.rolloffFactor:o._rolloffFactor,panningModel:void 0!==n.pannerAttr.panningModel?n.pannerAttr.panningModel:o._panningModel})}else 2===i.length&&(n=i[0],t=parseInt(i[1],10));for(var a=o._getSoundIds(t),s=0;s<a.length;s++)if(r=o._soundById(a[s])){var p=r._pannerAttr;p={coneInnerAngle:void 0!==n.coneInnerAngle?n.coneInnerAngle:p.coneInnerAngle,coneOuterAngle:void 0!==n.coneOuterAngle?n.coneOuterAngle:p.coneOuterAngle,coneOuterGain:void 0!==n.coneOuterGain?n.coneOuterGain:p.coneOuterGain,distanceModel:void 0!==n.distanceModel?n.distanceModel:p.distanceModel,maxDistance:void 0!==n.maxDistance?n.maxDistance:p.maxDistance,refDistance:void 0!==n.refDistance?n.refDistance:p.refDistance,rolloffFactor:void 0!==n.rolloffFactor?n.rolloffFactor:p.rolloffFactor,panningModel:void 0!==n.panningModel?n.panningModel:p.panningModel};var c=r._panner;c?(c.coneInnerAngle=p.coneInnerAngle,c.coneOuterAngle=p.coneOuterAngle,c.coneOuterGain=p.coneOuterGain,c.distanceModel=p.distanceModel,c.maxDistance=p.maxDistance,c.refDistance=p.refDistance,c.rolloffFactor=p.rolloffFactor,c.panningModel=p.panningModel):(r._pos||(r._pos=o._pos||[0,0,-.5]),e(r,"spatial"))}return o},Sound.prototype.init=function(e){return function(){var n=this,t=n._parent;n._orientation=t._orientation,n._stereo=t._stereo,n._pos=t._pos,n._pannerAttr=t._pannerAttr,e.call(this),n._stereo?t.stereo(n._stereo):n._pos&&t.pos(n._pos[0],n._pos[1],n._pos[2],n._id)}}(Sound.prototype.init),Sound.prototype.reset=function(e){return function(){var n=this,t=n._parent;return n._orientation=t._orientation,n._stereo=t._stereo,n._pos=t._pos,n._pannerAttr=t._pannerAttr,n._stereo?t.stereo(n._stereo):n._pos?t.pos(n._pos[0],n._pos[1],n._pos[2],n._id):n._panner&&(n._panner.disconnect(0),n._panner=void 0,t._refreshBuffer(n)),e.call(this)}}(Sound.prototype.reset);var e=function(e,n){n=n||"spatial","spatial"===n?(e._panner=Howler.ctx.createPanner(),e._panner.coneInnerAngle=e._pannerAttr.coneInnerAngle,e._panner.coneOuterAngle=e._pannerAttr.coneOuterAngle,e._panner.coneOuterGain=e._pannerAttr.coneOuterGain,e._panner.distanceModel=e._pannerAttr.distanceModel,e._panner.maxDistance=e._pannerAttr.maxDistance,e._panner.refDistance=e._pannerAttr.refDistance,e._panner.rolloffFactor=e._pannerAttr.rolloffFactor,e._panner.panningModel=e._pannerAttr.panningModel,void 0!==e._panner.positionX?(e._panner.positionX.setValueAtTime(e._pos[0],Howler.ctx.currentTime),e._panner.positionY.setValueAtTime(e._pos[1],Howler.ctx.currentTime),e._panner.positionZ.setValueAtTime(e._pos[2],Howler.ctx.currentTime)):e._panner.setPosition(e._pos[0],e._pos[1],e._pos[2]),void 0!==e._panner.orientationX?(e._panner.orientationX.setValueAtTime(e._orientation[0],Howler.ctx.currentTime),e._panner.orientationY.setValueAtTime(e._orientation[1],Howler.ctx.currentTime),e._panner.orientationZ.setValueAtTime(e._orientation[2],Howler.ctx.currentTime)):e._panner.setOrientation(e._orientation[0],e._orientation[1],e._orientation[2])):(e._panner=Howler.ctx.createStereoPanner(),e._panner.pan.setValueAtTime(e._stereo,Howler.ctx.currentTime)),e._panner.connect(e._node),e._paused||e._parent.pause(e._id,!0).play(e._id,!0)}}();// export
 
-(function() {
-  function join() {}
+// (function() {
+//   function join() {}
 
-  function htmlToElement(html) {
-    var template = document.createElement('template');
-    html = html.trim();
-    template.innerHTML = html;
-    if (template.content) {
-      return template.content.firstChild;
-    }
-    return template.firstChild;
-  }
+//   function htmlToElement(html) {
+//     var template = document.createElement('template');
+//     html = html.trim();
+//     template.innerHTML = html;
+//     if (template.content) {
+//       return template.content.firstChild;
+//     }
+//     return template.firstChild;
+//   }
 
-  function getMeta(metaName) {
-    var metas = document.getElementsByTagName('meta');
-    for (var i = 0; i < metas.length; i++) {
-      if (metas[i].getAttribute('name') === metaName) {
-        return metas[i].getAttribute('content');
-      }
-    }
-    return '';
-  }
-  var sprites =
-  {
-    "urls": [
-      "/audio/audio.pack.webm",
-      "/audio/audio.pack.mp3"
-    ],
-    "sprite": {
-      "300": [
-        0,
-        2536.0090702947846
-      ],
-      "applause-lite": [
-        4000,
-        3551.201814058957
-      ],
-      "applause-more": [
-        9000,
-        7540.861678004536
-      ],
-      "awww": [
-        18000,
-        1344.0136054421785
-      ],
-      "bwamp-2": [
-        21000,
-        2886.8707482993195
-      ],
-      "bwamp-3": [
-        25000,
-        2959.4104308390038
-      ],
-      "bwamp": [
-        29000,
-        3030.204081632654
-      ],
-      "cha-ching": [
-        34000,
-        1666.6666666666642
-      ],
-      "cheers": [
-        37000,
-        1655.9863945578215
-      ],
-      "cowpaths": [
-        40000,
-        2377.1428571428573
-      ],
-      "drum-roll": [
-        44000,
-        1388.6621315192756
-      ],
-      "fire": [
-        47000,
-        2196.9841269841268
-      ],
-      "goose": [
-        51000,
-        359.99999999999943
-      ],
-      "ham-horn-multi": [
-        53000,
-        2856.054421768704
-      ],
-      "ham-horn": [
-        57000,
-        1973.6961451247198
-      ],
-      "horse": [
-        60000,
-        2106.6666666666692
-      ],
-      "lots-of-laughs": [
-        64000,
-        2194.285714285712
-      ],
-      "mindblown": [
-        68000,
-        1524.9659863945624
-      ],
-      "minecraft-death": [
-        71000,
-        417.9591836734744
-      ],
-      "no": [
-        73000,
-        804.9659863945635
-      ],
-      "nonono-cat": [
-        75000,
-        3636.9841269841318
-      ],
-      "oooh": [
-        80000,
-        2545.6916099773252
-      ],
-      "power-on": [
-        84000,
-        4153.469387755109
-      ],
-      "powerful": [
-        90000,
-        612.0181405895693
-      ],
-      "sad-trombone": [
-        92000,
-        4017.052154195014
-      ],
-      "twinkle": [
-        98000,
-        3138.3673469387786
-      ],
-      "yes": [
-        103000,
-        924.9659863945539
-      ]
-    }
-  };
-  // export
-  var bwamps = {},
-    dangerColors = ["dark-green", "orange", "dark-red"],
-    bwampsLeft = [
-      {
-        id: "👏",
-        danger: 0, volume: 1,
-        sound: "applause-lite",
-      },
-      {
-        id: "👏👏👏",
-        danger: 0, volume: 0.8,
-        sound: "applause-more",
-      },
-      {
-        id: "😮",
-        danger: 0, volume: 0.8,
-        sound: "oooh",
-      },
-      {
-        id: "🥁🥁🥁",
-        danger: 0, volume: 1,
-        sound: "drum-roll",
-      },
-      {
-        id: "💪",
-        danger: 1, volume: 1,
-        sound: "powerful",
-      },
-      {
-        id: "🎉",
-        danger: 1, volume: 0.7,
-        sound: "bwamp",
-      },
-      {
-        id: "🎉🎉",
-        danger: 1, volume: 0.7,
-        sound: "bwamp-2",
-      },
-      {
-        id: "🎉🎉🎉",
-        danger: 1, volume: 0.7,
-        sound: "bwamp-3",
-      },
-      {
-        id: "🔥🔥🔥",
-        danger: 2, volume: 1,
-        sound: "fire",
-      },
-      {
-        id: "😂🤭😂",
-        danger: 2, volume: 1,
-        sound: "lots-of-laughs",
-      },
-      {
-        id: "⛏💀",
-        danger: 2, volume: 1,
-        sound: "minecraft-death",
-      },
-      {
-        id: "🍖📯🔁",
-        danger: 2, volume: 1,
-        sound: "ham-horn-multi",
-      },
-    ],
-    bwampsRight = [
-      {
-        id: "👍",
-        danger: 0, volume: 1,
-        sound: "yes",
-      },
-      {
-        id: "👎",
-        danger: 0, volume: 1,
-        sound: "no",
-      },
-      {
-        id: "😻",
-        danger: 0, volume: 1,
-        sound: "awww",
-      },
-      {
-        id: "✨",
-        danger: 0, volume: 0.5,
-        sound: "twinkle",
-      },
-      {
-        id: "💰",
-        danger: 1, volume: 1,
-        sound: "cha-ching",
-      },
-      {
-        id: "😰🎺",
-        danger: 1, volume: 1,
-        sound: "sad-trombone",
-      },
-      {
-        id: "🥂🍻",
-        danger: 1, volume: 1,
-        sound: "cheers",
-      },
-      {
-        id: "🦢",
-        danger: 1, volume: 1,
-        sound: "goose",
-      },
-      {
-        id: "🤯🤯🤯",
-        danger: 2, volume: 1,
-        sound: "mindblown",
-      },    {
-        id: "🐴🐴🐴",
-        danger: 2, volume: 1,
-        sound: "horse",
-      },
-      {
-        id: "🐄🐄🐄",
-        danger: 2, volume: 1,
-        sound: "cowpaths",
-      },
-      {
-        id: "🐈👎👎",
-        danger: 2, volume: 1,
-        sound: "nonono-cat",
-      },
-    ];
+//   function getMeta(metaName) {
+//     var metas = document.getElementsByTagName('meta');
+//     for (var i = 0; i < metas.length; i++) {
+//       if (metas[i].getAttribute('name') === metaName) {
+//         return metas[i].getAttribute('content');
+//       }
+//     }
+//     return '';
+//   }
+//   var sprites =
+//   {
+//     "urls": [
+//       "/audio/audio.pack.webm",
+//       "/audio/audio.pack.mp3"
+//     ],
+//     "sprite": {
+//       "300": [
+//         0,
+//         2536.0090702947846
+//       ],
+//       "applause-lite": [
+//         4000,
+//         3551.201814058957
+//       ],
+//       "applause-more": [
+//         9000,
+//         7540.861678004536
+//       ],
+//       "awww": [
+//         18000,
+//         1344.0136054421785
+//       ],
+//       "bwamp-2": [
+//         21000,
+//         2886.8707482993195
+//       ],
+//       "bwamp-3": [
+//         25000,
+//         2959.4104308390038
+//       ],
+//       "bwamp": [
+//         29000,
+//         3030.204081632654
+//       ],
+//       "cha-ching": [
+//         34000,
+//         1666.6666666666642
+//       ],
+//       "cheers": [
+//         37000,
+//         1655.9863945578215
+//       ],
+//       "cowpaths": [
+//         40000,
+//         2377.1428571428573
+//       ],
+//       "drum-roll": [
+//         44000,
+//         1388.6621315192756
+//       ],
+//       "fire": [
+//         47000,
+//         2196.9841269841268
+//       ],
+//       "goose": [
+//         51000,
+//         359.99999999999943
+//       ],
+//       "ham-horn-multi": [
+//         53000,
+//         2856.054421768704
+//       ],
+//       "ham-horn": [
+//         57000,
+//         1973.6961451247198
+//       ],
+//       "horse": [
+//         60000,
+//         2106.6666666666692
+//       ],
+//       "lots-of-laughs": [
+//         64000,
+//         2194.285714285712
+//       ],
+//       "mindblown": [
+//         68000,
+//         1524.9659863945624
+//       ],
+//       "minecraft-death": [
+//         71000,
+//         417.9591836734744
+//       ],
+//       "no": [
+//         73000,
+//         804.9659863945635
+//       ],
+//       "nonono-cat": [
+//         75000,
+//         3636.9841269841318
+//       ],
+//       "oooh": [
+//         80000,
+//         2545.6916099773252
+//       ],
+//       "power-on": [
+//         84000,
+//         4153.469387755109
+//       ],
+//       "powerful": [
+//         90000,
+//         612.0181405895693
+//       ],
+//       "sad-trombone": [
+//         92000,
+//         4017.052154195014
+//       ],
+//       "twinkle": [
+//         98000,
+//         3138.3673469387786
+//       ],
+//       "yes": [
+//         103000,
+//         924.9659863945539
+//       ]
+//     }
+//   };
+//   // export
+//   var bwamps = {},
+//     dangerColors = ["dark-green", "orange", "dark-red"],
+//     bwampsLeft = [
+//       {
+//         id: "👏",
+//         danger: 0, volume: 1,
+//         sound: "applause-lite",
+//       },
+//       {
+//         id: "👏👏👏",
+//         danger: 0, volume: 0.8,
+//         sound: "applause-more",
+//       },
+//       {
+//         id: "😮",
+//         danger: 0, volume: 0.8,
+//         sound: "oooh",
+//       },
+//       {
+//         id: "🥁🥁🥁",
+//         danger: 0, volume: 1,
+//         sound: "drum-roll",
+//       },
+//       {
+//         id: "💪",
+//         danger: 1, volume: 1,
+//         sound: "powerful",
+//       },
+//       {
+//         id: "🎉",
+//         danger: 1, volume: 0.7,
+//         sound: "bwamp",
+//       },
+//       {
+//         id: "🎉🎉",
+//         danger: 1, volume: 0.7,
+//         sound: "bwamp-2",
+//       },
+//       {
+//         id: "🎉🎉🎉",
+//         danger: 1, volume: 0.7,
+//         sound: "bwamp-3",
+//       },
+//       {
+//         id: "🔥🔥🔥",
+//         danger: 2, volume: 1,
+//         sound: "fire",
+//       },
+//       {
+//         id: "😂🤭😂",
+//         danger: 2, volume: 1,
+//         sound: "lots-of-laughs",
+//       },
+//       {
+//         id: "⛏💀",
+//         danger: 2, volume: 1,
+//         sound: "minecraft-death",
+//       },
+//       {
+//         id: "🍖📯🔁",
+//         danger: 2, volume: 1,
+//         sound: "ham-horn-multi",
+//       },
+//     ],
+//     bwampsRight = [
+//       {
+//         id: "👍",
+//         danger: 0, volume: 1,
+//         sound: "yes",
+//       },
+//       {
+//         id: "👎",
+//         danger: 0, volume: 1,
+//         sound: "no",
+//       },
+//       {
+//         id: "😻",
+//         danger: 0, volume: 1,
+//         sound: "awww",
+//       },
+//       {
+//         id: "✨",
+//         danger: 0, volume: 0.5,
+//         sound: "twinkle",
+//       },
+//       {
+//         id: "💰",
+//         danger: 1, volume: 1,
+//         sound: "cha-ching",
+//       },
+//       {
+//         id: "😰🎺",
+//         danger: 1, volume: 1,
+//         sound: "sad-trombone",
+//       },
+//       {
+//         id: "🥂🍻",
+//         danger: 1, volume: 1,
+//         sound: "cheers",
+//       },
+//       {
+//         id: "🦢",
+//         danger: 1, volume: 1,
+//         sound: "goose",
+//       },
+//       {
+//         id: "🤯🤯🤯",
+//         danger: 2, volume: 1,
+//         sound: "mindblown",
+//       },    {
+//         id: "🐴🐴🐴",
+//         danger: 2, volume: 1,
+//         sound: "horse",
+//       },
+//       {
+//         id: "🐄🐄🐄",
+//         danger: 2, volume: 1,
+//         sound: "cowpaths",
+//       },
+//       {
+//         id: "🐈👎👎",
+//         danger: 2, volume: 1,
+//         sound: "nonono-cat",
+//       },
+//     ];
 
-  (function() {
-    // var bwamp_container = document.getElementById('bwamp_container');
+//   (function() {
+//     // var bwamp_container = document.getElementById('bwamp_container');
 
-    function wireStereo(b) {
-      bwamps[b.id] = b;
-      var linkTitle = b.sound.split('.');
-      // var input = htmlToElement('<div class="pv1" style="width:48%">' +
-      //   '<div style="user-select: none; white-space: nowrap; cursor: pointer" title="' + linkTitle[0] + '"' +
-      //   'class="db tc f3 link br-pill ba bw2 ph2 pv2 pv3-ns mb3 mb2-ns hover-bg-moon-gray ' + dangerColors[b.danger] + ' bg-white">' +
-      //   b.id +
-      //   '</div>' +
-      //   '</div>');
-      // bwamp_container.appendChild(input);
-      var input = document.getElementById(`${b.sound}:${b.id}`);
-      // input.firstChild.setAttribute('id', b.sound + ":" + b.id);
-      input.addEventListener('click', function(e) {
-        send(b.id);
-        e.preventDefault();
-      });
-    }
+//     function wireStereo(b) {
+//       bwamps[b.id] = b;
+//       var linkTitle = b.sound.split('.');
+//       // var input = htmlToElement('<div class="pv1" style="width:48%">' +
+//       //   '<div style="user-select: none; white-space: nowrap; cursor: pointer" title="' + linkTitle[0] + '"' +
+//       //   'class="db tc f3 link br-pill ba bw2 ph2 pv2 pv3-ns mb3 mb2-ns hover-bg-moon-gray ' + dangerColors[b.danger] + ' bg-white">' +
+//       //   b.id +
+//       //   '</div>' +
+//       //   '</div>');
+//       // bwamp_container.appendChild(input);
+//       var input = document.getElementById(`${b.sound}:${b.id}`);
+//       // input.firstChild.setAttribute('id', b.sound + ":" + b.id);
+//       input.addEventListener('click', function(e) {
+//         send(b.id);
+//         e.preventDefault();
+//       });
+//     }
 
-    for (var i in bwampsLeft) {
-      wireStereo(bwampsLeft[i]);
-      wireStereo(bwampsRight[i]);
-    }
-  })();
-  // export
-  function play(b) {}
+//     for (var i in bwampsLeft) {
+//       wireStereo(bwampsLeft[i]);
+//       wireStereo(bwampsRight[i]);
+//     }
+//   })();
+//   // export
+//   function play(b) {}
 
-  (function() {
-    sprites.src = sprites.urls; // fixup generated code
+//   (function() {
+//     sprites.src = sprites.urls; // fixup generated code
 
-    var volumeCtl = document.getElementById('volume'),
-      sound_splash = document.getElementById('sound-splash'),
-      sound = null;
+//     var volumeCtl = document.getElementById('volume'),
+//       sound_splash = document.getElementById('sound-splash'),
+//       sound = null;
 
-    function tryStartAudio(click) {
-      Howler.volume(0);
-      if (Howler.state == "suspended") {
-        sound_splash.style.display = 'flex';
-      }
-      if (Howler.state == "running" || click) {
-        updateVolume(localStorage.getItem("volume"));
-        sound = new Howl(sprites);
-        if (click) {
-          play({sound: "power-on", volume: 0.3});
-        }
-        sound_splash.style.display = 'none';
-      }
-    }
+//     function tryStartAudio(click) {
+//       Howler.volume(0);
+//       if (Howler.state == "suspended") {
+//         sound_splash.style.display = 'flex';
+//       }
+//       if (Howler.state == "running" || click) {
+//         updateVolume(localStorage.getItem("volume"));
+//         sound = new Howl(sprites);
+//         if (click) {
+//           play({sound: "power-on", volume: 0.3});
+//         }
+//         sound_splash.style.display = 'none';
+//       }
+//     }
 
-    sound_splash.addEventListener("click", function() {
-      tryStartAudio(true);
-    });
-    tryStartAudio(false);
+//     sound_splash.addEventListener("click", function() {
+//       tryStartAudio(true);
+//     });
+//     tryStartAudio(false);
 
-    play = function(b) {
-      if (!sound) {
-        return;
-      }
-      var id = sound.play(b.sound);
-      sound.volume(b.volume, id);
-    };
+//     play = function(b) {
+//       if (!sound) {
+//         return;
+//       }
+//       var id = sound.play(b.sound);
+//       sound.volume(b.volume, id);
+//     };
 
-    volumeCtl.addEventListener('input', function(ev) {
-      updateVolume(volumeCtl.value);
-    });
+//     volumeCtl.addEventListener('input', function(ev) {
+//       updateVolume(volumeCtl.value);
+//     });
 
 
-    function updateVolume(v) {
-      var vol = 0.5;
-      if (v) {
-        v = parseFloat(v);
-        if (v >= 0 && v <= 1.0) {
-          vol = v;
-        }
-      }
-      volumeCtl.value = vol;
-      localStorage.setItem("volume", vol);
-      Howler.volume(vol * vol);
-    }
+//     function updateVolume(v) {
+//       var vol = 0.5;
+//       if (v) {
+//         v = parseFloat(v);
+//         if (v >= 0 && v <= 1.0) {
+//           vol = v;
+//         }
+//       }
+//       volumeCtl.value = vol;
+//       localStorage.setItem("volume", vol);
+//       Howler.volume(vol * vol);
+//     }
 
-  })();
-  // export
-  function show(danger, name, sound) {}
+//   })();
+//   // export
+//   function show(danger, name, sound) {}
 
-  (function() {
-    var JOIN = 0,
-      LEAVE = 1,
-      SOUND = 2;
+//   (function() {
+//     var JOIN = 0,
+//       LEAVE = 1,
+//       SOUND = 2;
 
-    var container = document.getElementById('ephermal-bubbles');
+//     var container = document.getElementById('ephermal-bubbles');
 
-    show = function(danger, name, sound) {
-      var hpos = Math.random() * 100;
-      if (hpos < 50) {
-        hpos = "left: " + hpos + "%;"
-      } else {
-        hpos = "right: " + (100 - hpos) + "%;"
-      }
+//     show = function(danger, name, sound) {
+//       var hpos = Math.random() * 100;
+//       if (hpos < 50) {
+//         hpos = "left: " + hpos + "%;"
+//       } else {
+//         hpos = "right: " + (100 - hpos) + "%;"
+//       }
 
-      var animate_ms = 2500 + 1000 * Math.random(); // 2.5 - 3.5s
+//       var animate_ms = 2500 + 1000 * Math.random(); // 2.5 - 3.5s
 
-      var bubble = htmlToElement(
-        '<div class="message db tc f3 br-pill ph4 pv3 white bg-' + dangerColors[danger] + '"' +
-        'style="position: fixed; ' + hpos + ';' +
-        'animation-name: bubble;' +
-        'animation-duration: ' + animate_ms + 'ms;' +
-        'animation-timing-function: linear;' +
-        'animation-fill-mode: forwards;' +
-        'pointer-events: none;">' +
-        '<span style="text-shadow:2px 2px 3px rgba(0,0,0,.3);margin-right:3px;"></span> <span class="nowrap"></span>' +
-        '</div>');
-      bubble.firstChild.innerText = name;
-      bubble.lastChild.innerText = sound;
+//       var bubble = htmlToElement(
+//         '<div class="message db tc f3 br-pill ph4 pv3 white bg-' + dangerColors[danger] + '"' +
+//         'style="position: fixed; ' + hpos + ';' +
+//         'animation-name: bubble;' +
+//         'animation-duration: ' + animate_ms + 'ms;' +
+//         'animation-timing-function: linear;' +
+//         'animation-fill-mode: forwards;' +
+//         'pointer-events: none;">' +
+//         '<span style="text-shadow:2px 2px 3px rgba(0,0,0,.3);margin-right:3px;"></span> <span class="nowrap"></span>' +
+//         '</div>');
+//       bubble.firstChild.innerText = name;
+//       bubble.lastChild.innerText = sound;
 
-      container.appendChild(bubble);
-      while (container.childElementCount > 50) {
-        container.removeChild(container.firstChild);
-      }
-      window.setTimeout(function() {
-        container.removeChild(bubble)
-      }, animate_ms)
-    };
-  })();
-  // export
-  function send(text) {}
+//       container.appendChild(bubble);
+//       while (container.childElementCount > 50) {
+//         container.removeChild(container.firstChild);
+//       }
+//       window.setTimeout(function() {
+//         container.removeChild(bubble)
+//       }, animate_ms)
+//     };
+//   })();
+//   // export
+//   function send(text) {}
 
-  (function() {
-    var state = document.getElementById("status");
+//   (function() {
+//     var state = document.getElementById("status");
 
-    if (getMeta("sandbox")) {
-      send = function(text) {
-        // Sandbox mode
-        var b = bwamps[text];
-        if (b) {
-          show(b.danger, "user", text);
-          play(b);
-        }
-      };
-      return
-    }
+//     if (getMeta("sandbox")) {
+//       send = function(text) {
+//         // Sandbox mode
+//         var b = bwamps[text];
+//         if (b) {
+//           show(b.danger, "user", text);
+//           play(b);
+//         }
+//       };
+//       return
+//     }
 
-    var JOIN = 0,
-      LEAVE = 1,
-      SOUND = 2,
-      SUPPRESSED = 3;
+//     var JOIN = 0,
+//       LEAVE = 1,
+//       SOUND = 2,
+//       SUPPRESSED = 3;
 
-    var log = document.getElementById("log"),
-      userList = document.getElementById("users"),
-      users = [],
-      backoff = 1000,
-      socket;
+//     var log = document.getElementById("log"),
+//       userList = document.getElementById("users"),
+//       users = [],
+//       backoff = 1000,
+//       socket;
 
-    function connect() {
-      if (backoff < 8000) {
-        backoff = backoff * 2
-      }
-      // var ver = encodeURIComponent(getMeta("version"));
-      // var csrf = encodeURIComponent(getMeta("csrf"));
-      socket = io();
-      socket.on("connect", function(evt) {
-        onOpen(evt);
-      });
-      socket.on("disconnect", function(evt) {
-        onClose(evt);
-      });
-      socket.on("message", function(evt) {
-        onMessage(evt);
-      });
-      socket.on("join", function(evt) {
-        onJoin(evt);
-      });
-      socket.on("leave", function(evt) {
-        onLeave(evt);
-      });
-      socket.on("sound", function(evt) {
-        onSound(evt);
-      });
-      socket.on("suppressed", function(evt) {
-        onSuppressed(evt);
-      });
-      socket.on("error", function(evt) {
-        onError(evt);
-      });
-    }
+//     function connect() {
+//       if (backoff < 8000) {
+//         backoff = backoff * 2
+//       }
+//       // var ver = encodeURIComponent(getMeta("version"));
+//       // var csrf = encodeURIComponent(getMeta("csrf"));
+//       socket = io();
+//       socket.on("connect", function(evt) {
+//         onOpen(evt);
+//       });
+//       socket.on("disconnect", function(evt) {
+//         onClose(evt);
+//       });
+//       socket.on("message", function(evt) {
+//         onMessage(evt);
+//       });
+//       socket.on("join", function(evt) {
+//         onJoin(evt);
+//       });
+//       socket.on("leave", function(evt) {
+//         onLeave(evt);
+//       });
+//       socket.on("sound", function(evt) {
+//         onSound(evt);
+//       });
+//       socket.on("suppressed", function(evt) {
+//         onSuppressed(evt);
+//       });
+//       socket.on("error", function(evt) {
+//         onError(evt);
+//       });
+//     }
 
-    function getAccountName() {
-      return document.getElementById('account').value || 'anonymous';
-    }
+//     function getAccountName() {
+//       return document.getElementById('account').value || 'anonymous';
+//     }
 
-    send = function(text) {
-      if (socket) {
-        socket.emit("sound", JSON.stringify({
-          who: getAccountName(),
-          what: SOUND,
-          sound: text,
-        }));
-      }
-    };
+//     send = function(text) {
+//       if (socket) {
+//         socket.emit("sound", JSON.stringify({
+//           who: getAccountName(),
+//           what: SOUND,
+//           sound: text,
+//         }));
+//       }
+//     };
 
-    function onOpen(evt) {
-      state.className = "green";
-      state.innerText = "connected";
-      backoff = 1000;
-      join(getAccountName());
-    }
+//     function onOpen(evt) {
+//       state.className = "green";
+//       state.innerText = "connected";
+//       backoff = 1000;
+//       join(getAccountName());
+//     }
 
-    function onClose(evt) {
-      if (evt.code == 1000 || evt.code == 1001 || evt.code == 1006) {
-        state.className = "";
-        state.innerText = "disconnected";
-        users = [];
-        userList.innerText = "";
-        setTimeout(connect, backoff)
-      } else {
-        // For unknown codes, wait a second, then refresh the entire page.
-        setTimeout(reloadPage, backoff);
-      }
-    }
+//     function onClose(evt) {
+//       if (evt.code == 1000 || evt.code == 1001 || evt.code == 1006) {
+//         state.className = "";
+//         state.innerText = "disconnected";
+//         users = [];
+//         userList.innerText = "";
+//         setTimeout(connect, backoff)
+//       } else {
+//         // For unknown codes, wait a second, then refresh the entire page.
+//         setTimeout(reloadPage, backoff);
+//       }
+//     }
 
-    function reloadPage() {
-      window.location.reload(true);
-    }
+//     function reloadPage() {
+//       window.location.reload(true);
+//     }
 
-    function updateUsers() {
-      if (users.length < 20) {
-        userList.innerText = users.join(", ");
-      } else {
-        userList.innerText = "" + users.length;
-      }
-    }
+//     function updateUsers() {
+//       if (users.length < 20) {
+//         userList.innerText = users.join(", ");
+//       } else {
+//         userList.innerText = "" + users.length;
+//       }
+//     }
 
-    join = function(who) {
-      if (join._timeout) {
-        clearTimeout(join._timeout);
-      }
-      join._timeout = setTimeout(function() {
-        socket.emit("join", JSON.stringify({
-          who: who,
-        }));
-      }, 300);
-    }
+//     join = function(who) {
+//       if (join._timeout) {
+//         clearTimeout(join._timeout);
+//       }
+//       join._timeout = setTimeout(function() {
+//         socket.emit("join", JSON.stringify({
+//           who: who,
+//         }));
+//       }, 300);
+//     }
 
-    function onJoin(evt) {
-      users.push(evt.who);
-      users.sort();
-      updateUsers();
-    }
+//     function onJoin(evt) {
+//       users.push(evt.who);
+//       users.sort();
+//       updateUsers();
+//     }
 
-    function onLeave(evt) {
-      first = true;
-      users = users.filter(function(value, index, arr) {
-        if (first && (value == evt.who)) {
-          first = false;
-          return false;
-        }
-        return true;
-      });
-      updateUsers();
-    }
+//     function onLeave(evt) {
+//       first = true;
+//       users = users.filter(function(value, index, arr) {
+//         if (first && (value == evt.who)) {
+//           first = false;
+//           return false;
+//         }
+//         return true;
+//       });
+//       updateUsers();
+//     }
 
-    function onSound(evt) {
-      var b = bwamps[evt.sound];
-      if (b) {
-        show(b.danger, evt.who, evt.sound);
-        play(b);
-        // FS.event('bwamp', {id_str: b.id, sound_str: b.sound, who_str: evt.who, me_bool: !!evt.me});
-      } else {
-        console.log(evt.who, "no such bwamp", evt.sound);
-      }
-    }
+//     function onSound(evt) {
+//       var b = bwamps[evt.sound];
+//       if (b) {
+//         show(b.danger, evt.who, evt.sound);
+//         play(b);
+//         // FS.event('bwamp', {id_str: b.id, sound_str: b.sound, who_str: evt.who, me_bool: !!evt.me});
+//       } else {
+//         console.log(evt.who, "no such bwamp", evt.sound);
+//       }
+//     }
 
-    function onSuppressed(evt) {
-      var b = bwamps[evt.sound];
-      if (b) {
-        show(b.danger, evt.who, evt.sound);
-        play(b);
-        // FS.event('suppressed', {id_str: b.id, sound_str: b.sound, cooldown_real: evt.cooldown});
-      }
-    }
+//     function onSuppressed(evt) {
+//       var b = bwamps[evt.sound];
+//       if (b) {
+//         show(b.danger, evt.who, evt.sound);
+//         play(b);
+//         // FS.event('suppressed', {id_str: b.id, sound_str: b.sound, cooldown_real: evt.cooldown});
+//       }
+//     }
 
-    function onMessage(evt) {
-      evt = JSON.parse(evt.data);
-      if (evt.who) {
-        switch (evt.what) {
-          case JOIN:
-            users.push(evt.who);
-            users.sort();
-            updateUsers();
-            break;
-          case LEAVE:
-            first = true;
-            users = users.filter(function(value, index, arr) {
-              if (first && (value == evt.who)) {
-                first = false;
-                return false;
-              }
-              return true;
-            });
-            updateUsers();
-            break;
-          case SOUND:
-            var b = bwamps[evt.sound];
-            if (b) {
-              show(b.danger, evt.who, evt.sound);
-              play(b);
-              // FS.event('bwamp', {id_str: b.id, sound_str: b.sound, who_str: evt.who, me_bool: !!evt.me});
-            } else {
-              console.log(evt.who, "no such bwamp", evt.sound);
-            }
-            break;
-          case SUPPRESSED:
-            var b = bwamps[evt.sound];
-            if (b) {
-              // TODO: visually display suppression?
-              // FS.event('suppressed', {id_str: b.id, sound_str: b.sound, cooldown_real: evt.cooldown});
-              console.log(evt.who, "suppressed", evt.sound, evt.cooldown);
-            } else {
-              console.log(evt.who, "no such bwamp", evt.sound);
-            }
-        }
-      }
-    }
+//     function onMessage(evt) {
+//       evt = JSON.parse(evt.data);
+//       if (evt.who) {
+//         switch (evt.what) {
+//           case JOIN:
+//             users.push(evt.who);
+//             users.sort();
+//             updateUsers();
+//             break;
+//           case LEAVE:
+//             first = true;
+//             users = users.filter(function(value, index, arr) {
+//               if (first && (value == evt.who)) {
+//                 first = false;
+//                 return false;
+//               }
+//               return true;
+//             });
+//             updateUsers();
+//             break;
+//           case SOUND:
+//             var b = bwamps[evt.sound];
+//             if (b) {
+//               show(b.danger, evt.who, evt.sound);
+//               play(b);
+//               // FS.event('bwamp', {id_str: b.id, sound_str: b.sound, who_str: evt.who, me_bool: !!evt.me});
+//             } else {
+//               console.log(evt.who, "no such bwamp", evt.sound);
+//             }
+//             break;
+//           case SUPPRESSED:
+//             var b = bwamps[evt.sound];
+//             if (b) {
+//               // TODO: visually display suppression?
+//               // FS.event('suppressed', {id_str: b.id, sound_str: b.sound, cooldown_real: evt.cooldown});
+//               console.log(evt.who, "suppressed", evt.sound, evt.cooldown);
+//             } else {
+//               console.log(evt.who, "no such bwamp", evt.sound);
+//             }
+//         }
+//       }
+//     }
 
-    function onError(evt) {
-      state.className = "red";
-      state.innerText = "error";
-    }
+//     function onError(evt) {
+//       state.className = "red";
+//       state.innerText = "error";
+//     }
     
-    if (typeof io === "undefined") {
-      state.innerText = "sockets not supported";
-      state.className = "red";
-    } else {
-      connect();
-    }
-  })();
+//     if (typeof io === "undefined") {
+//       state.innerText = "sockets not supported";
+//       state.className = "red";
+//     } else {
+//       connect();
+//     }
+//   })();
 
-  (function(){
-    const el = document.getElementById('account');
-    const display = document.getElementById('account-display');
-    if (el) {
-      var storedAccount = localStorage.getItem('accountName');
-      if (storedAccount !== null) {
-        el.value = storedAccount;
-        display.innerText = storedAccount;
-      }
+//   (function(){
+//     const el = document.getElementById('account');
+//     const display = document.getElementById('account-display');
+//     if (el) {
+//       var storedAccount = localStorage.getItem('accountName');
+//       if (storedAccount !== null) {
+//         el.value = storedAccount;
+//         display.innerText = storedAccount;
+//       }
 
-      // Update localStorage on input change
-      el.addEventListener('input', function(e) {
-        localStorage.setItem('accountName', el.value);
-        display.innerText = el.value;
-        // join(el.value);
-      });
-    }
-  }())
-}());
+//       // Update localStorage on input change
+//       el.addEventListener('input', function(e) {
+//         localStorage.setItem('accountName', el.value);
+//         display.innerText = el.value;
+//         // join(el.value);
+//       });
+//     }
+//   }())
+// }());
