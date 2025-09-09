@@ -4,9 +4,11 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build --workspace=@wwamp/api",
-    "dev": "npm run dev --workspace=@wwamp/api",
-    "dev:watch": "npm run dev:watch --workspace=@wwamp/api",
+    "build:wwamp": "cd packages/wwamp && npm run build",
+    "build:api": "cd services/api && npm run build",
+    "copy:wwamp": "cp packages/wwamp/dist/wwamp.js services/api/dist/public/scripts/ && cp packages/wwamp/dist/wwamp.js.map services/api/dist/public/scripts/",
+    "build": "npm run build:wwamp && npm run build:api && npm run copy:wwamp",
+    "dev": "npm run build && npm run start --workspace=@wwamp/api",
     "prod": "./scripts/setup.sh"
   },
   "repository": {
